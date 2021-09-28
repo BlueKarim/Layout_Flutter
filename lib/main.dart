@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 void main() {
-  runApp( MyApp());
+  runApp(const MyApp());
 }
 class MyApp extends StatefulWidget {
   const MyApp({ Key? key }) : super(key: key);
@@ -13,73 +12,71 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String light = 'GREEN';
+  String light = 'green';
   String instruction = 'GO';
   Color? instructionColor = Colors.green[500];
-  int _counter = 10;
-  Timer? _timer;
-  int num = 100;
-  String textbutton = 'Start';
+  int _counter = 30;
+  String textButton = 'Start';
+  Timer? timer;
 
-  @override
   void initState(){
-    light = 'GREEN';
+    light = 'green';
     instruction = 'GO';
     instructionColor = Colors.green[500];
+    _counter = 30;
     super.initState();
   }
-  void _startTimer(){
-    if(textbutton == 'Start')
+  void Start(){
+    if(textButton == 'Start' )
     {
-      textbutton = 'Stop';
-      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if(_counter>0){
-          _counter--;
-        }
-        else{
-          setState(() {
-            if(light == 'GREEN'){
-            light == 'YELLOW';
-            instruction = 'SLOW';
-            instructionColor = Colors.yellow[500];
-            _counter = 3;
+      textButton = 'Stop';
+      timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        setState(() {
+          if(_counter >0)
+          {
+            _counter--;
           }
-          else if(light == 'YELLOW'){
-            light == 'RED';
-            instruction = 'STOP!';
-            instructionColor = Colors.red[500];
-            _counter = 15;
+          else
+          {
+            if(light == 'green')
+            {
+              light = 'yellow';
+              instruction = 'SLOW';
+              instructionColor = Colors.yellow[500];
+              _counter = 3;
+            }
+            else if(light == 'yellow')
+            {
+              light = 'red';
+              instruction = 'STOP!';
+              instructionColor = Colors.red[500];
+              _counter = 15;
+            }
+            else
+            {
+              light = 'green';
+              instruction = 'GO';
+              instructionColor = Colors.green[500];
+              _counter = 30;
+            }
           }
-          else{
-            light == 'GREEN';
-            instruction = 'GO';
-            instructionColor = Colors.green[500];
-            _counter = 10;
-          }
-          });
-        }
-      });
-     });
+        });
+       });
     }
-    else if (textbutton == 'Stop')
+    else
     {
-      textbutton = 'Start';
-      _stopTimer();
+      textButton = 'Start';
+      timer?.cancel();
     }
-  }
-  void _stopTimer(){
-    _timer?.cancel();
   }
   int turnOnLight(String lightactive){
-    if(light == lightactive){
+    int num = 100;
+    if (light ==lightactive){
       num = 500;
-    }
-    else{
-      num = 100;
     }
     return num;
   }
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Traffic light",
@@ -114,24 +111,38 @@ class _MyAppState extends State<MyApp> {
                   Icon(
                     Icons.circle,
                     size: 100,
-                    color: Colors.green[turnOnLight('GREEN')],
+                    color: Colors.green[turnOnLight('green')],
                   ),
                   Icon(
                     Icons.circle,
                     size: 100,
-                    color: Colors.orange[turnOnLight('YELLOW')],
+                    color: Colors.orange[turnOnLight('yellow')],
                   ),
                   Icon(
                     Icons.circle,
                     size: 100,
-                    color: Colors.red[turnOnLight('RED')],
+                    color: Colors.red[turnOnLight('red')],
+                  )
+                ],
+              ),
+              Column(
+                children: [
+                  Icon(
+                    Icons.directions_walk,
+                    size: 150,
+                    color: Colors.red[turnOnLight('red')],
+                  ),
+                  Icon(
+                    Icons.directions_walk,
+                    size: 150,
+                    color: Colors.green[(turnOnLight('green'))],
                   )
                 ],
               ),
               ElevatedButton(
-                onPressed: _startTimer,
+                onPressed: Start,
                 child: Text(
-                  textbutton,
+                  textButton,
                   style: TextStyle(
                     fontSize: 32,
                     color: Colors.white,
